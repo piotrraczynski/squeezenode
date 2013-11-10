@@ -40,12 +40,13 @@ function SqueezeRequest (address, port) {
             result = reply;
             result.ok = true;
         }
-        callback(result);
+        if (callback)
+            callback(result);
     }
 
     this.request = function(player, params, callback){
         var finalParams = new Array();
-        finalParams.push(new Array(player));
+        finalParams.push(player);
         finalParams.push(params);
         client.request('slim.request', finalParams, function(err, reply){
             handle(err, reply, callback);

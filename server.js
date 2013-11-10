@@ -23,11 +23,15 @@
 */
 
 var util = require('util');
-var SqueezeRequest = require('./squeezerequest');
+var SqueezeRequest  = require('./squeezerequest');
+var SqueezePlayer   = require('./squeezeplayer');
 
 function SqueezeServer (address, port) {
     SqueezeServer.super_.apply(this, arguments);
     var defaultPlayer = "00:00:00:00:00:00";
+    var self = this;
+    this.players = [];
+    this.playerUpdateInterval = 2000;
 
     this.getPlayerCount = function(callback)
     {
@@ -59,6 +63,18 @@ function SqueezeServer (address, port) {
         this.request(defaultPlayer, ["syncgroups", "?"], callback);
     }
 
+    setInterval(function() {
+        self.getPlayers(function(reply) {
+            var players = reply.result.players_loop;
+            for (var pl in players) {
+                if (!self.players[players[pl].playerid]) { // player not on the list
+                    self.players[players[pl].playerid] =
+                        new SqueezePlayer(players[pl].playerid, self.address, self.port);
+                }
+            }
+        }
+        )
+    }, this.playerUpdateInterval);
 }
 
 util.inherits(SqueezeServer, SqueezeRequest);
