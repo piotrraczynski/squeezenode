@@ -20,7 +20,7 @@
  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
-*/
+ */
 
 var util = require('util');
 var SqueezeRequest = require('./squeezerequest');
@@ -29,31 +29,31 @@ function SqueezePlayer(playerId, address, port) {
     this.playerId = playerId;
     SqueezePlayer.super_.apply(this, [address, port]);
 
-    this.clearPlayList = function(callback) {
+    this.clearPlayList = function (callback) {
         this.request(playerId, ["playlist", "clear"], callback);
     }
 
-    this.getMode = function(callback) {
+    this.getMode = function (callback) {
         this.request(playerId, ["mode", "?"], callback);
     }
 
-    this.setName = function(name, callback) {
+    this.setName = function (name, callback) {
 
     }
 
-    this.getPlaylist = function(from, to, callback) {
-        this.request(playerId, ["status", from, to], function(reply) {
-            if(reply.ok)
+    this.getPlaylist = function (from, to, callback) {
+        this.request(playerId, ["status", from, to], function (reply) {
+            if (reply.ok)
                 reply.result = reply.result.playlist_loop;
             callback(reply);
         });
     }
 
-    this.getCurrentTitle = function(callback) {
+    this.getCurrentTitle = function (callback) {
         this.request(playerId, ["current_title", "?"], callback);
     }
 
-    this.getStatus = function(callback) {
+    this.getStatus = function (callback) {
         this.request(playerId, ["status"], callback);
     }
 }

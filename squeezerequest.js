@@ -20,14 +20,14 @@
  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
-*/
+ */
 
 var jayson = require('jayson');
 
-function SqueezeRequest (address, port) {
-    this.address    = (address !== undefined) ? address : "localhost";
-    this.port       = (port !== undefined) ? port : 9000;
-    var jsonrpc     = this.address + ':' + this.port + '/jsonrpc.js';
+function SqueezeRequest(address, port) {
+    this.address = (address !== undefined) ? address : "localhost";
+    this.port = (port !== undefined) ? port : 9000;
+    var jsonrpc = this.address + ':' + this.port + '/jsonrpc.js';
     var client = jayson.client.http(jsonrpc);
 
     function handle(err, reply, callback) {
@@ -44,11 +44,11 @@ function SqueezeRequest (address, port) {
             callback(result);
     }
 
-    this.request = function(player, params, callback){
+    this.request = function (player, params, callback) {
         var finalParams = new Array();
         finalParams.push(player);
         finalParams.push(params);
-        client.request('slim.request', finalParams, function(err, reply){
+        client.request('slim.request', finalParams, function (err, reply) {
             handle(err, reply, callback);
         });
     }
