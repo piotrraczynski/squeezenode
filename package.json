@@ -9,7 +9,10 @@
         "logitechmediaserver",
         "spotify",
         "soundcloud",
-        "jsonrpc"
+        "jsonrpc",
+        "remote",
+        "smarthome",
+        "home automation"
     ],
     "dependencies": {
         "jayson": ">= 1.0.11"
