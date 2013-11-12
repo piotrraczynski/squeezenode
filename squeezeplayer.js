@@ -25,8 +25,10 @@
 var util = require('util');
 var SqueezeRequest = require('./squeezerequest');
 
-function SqueezePlayer(playerId, address, port) {
+function SqueezePlayer(playerId, name, address, port) {
     this.playerId = playerId;
+    this.name = name;
+
     SqueezePlayer.super_.apply(this, [address, port]);
 
     this.clearPlayList = function (callback) {
@@ -38,7 +40,12 @@ function SqueezePlayer(playerId, address, port) {
     }
 
     this.setName = function (name, callback) {
+        this.request(playerId, ["name", name], callback);
+    }
 
+
+    this.getName = function (callback) {
+        this.request(playerId, ["name", "?"], callback);
     }
 
     this.getPlaylist = function (from, to, callback) {
@@ -49,12 +56,36 @@ function SqueezePlayer(playerId, address, port) {
         });
     }
 
+    this.getStatusWithPlaylist = function (from, to, callback) {
+        this.request(playerId, ["status", from, to], function (reply) {
+            if (reply.ok)
+                reply.result = reply.result;
+            callback(reply);
+        });
+    }
+
     this.getCurrentTitle = function (callback) {
-        this.request(playerId, ["current_title", "?"], callback);
+        this.request(playerId, ["current_title", "?"], function (reply) {
+            if (reply.ok)
+                reply.result = reply.result._current_title;
+            callback(reply);
+        });
+    }
+
+    this.getCurrentRemoteMeta = function (callback) {
+        this.request(playerId, ["status"], function (reply) {
+            if (reply.ok)
+                reply.result = reply.result.remoteMeta;
+            callback(reply);
+        });
     }
 
     this.getStatus = function (callback) {
         this.request(playerId, ["status"], callback);
+    }
+
+    this.playcmd = function (callback) {
+        this.request(playerId, ["spotifyplcmd","cmd:load","uri:spotify:album:1iFHQ923uBGgyIJGzCo2U0"], callback);
     }
 }
 
