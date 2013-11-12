@@ -23,14 +23,18 @@
  */
 
 var util = require('util');
+var fs = require('fs');
 var SqueezeRequest = require('./squeezerequest');
 var SqueezePlayer = require('./squeezeplayer');
+
 
 function SqueezeServer(address, port) {
     SqueezeServer.super_.apply(this, arguments);
     var defaultPlayer = "00:00:00:00:00:00";
     var self = this;
     this.players = [];
+    this.apps = [];
+
     this.playerUpdateInterval = 2000;
 
     this.getPlayerCount = function (callback) {
@@ -61,20 +65,47 @@ function SqueezeServer(address, port) {
         this.request(defaultPlayer, ["syncgroups", "?"], callback);
     }
 
-    setInterval(function () {
-        self.getPlayers(function (reply) {
+    this.getApps = function (callback) {
+        this.request(defaultPlayer, ["apps", 0, 100], callback);
+    }
+
+    function register() {
+        self.getApps(function (reply) { //TODO refactor this
+            var apps = reply.result.appss_loop;
+            var dir = __dirname + '/';
+            fs.readdir(dir, function (err, files) {
+                files.forEach(function (file) {
+                    var fil = file.substr(0, file.lastIndexOf("."));
+                    for (var pl in apps) {
+                        if (fil === apps[pl].cmd) {
+                            var app = require(dir + file);
+                            self.apps.push(new app(apps[pl].name, apps[pl].cmd, self.address, self.port));
+                        }
+                    }
+                });
+            });
+            self.emit('register1');
+        });
+
+        self.on('register1', function () {
+            self.getPlayers(function (reply) { //TODO refactor this
                 var players = reply.result.players_loop;
+                console.dir(players);
                 for (var pl in players) {
                     if (!self.players[players[pl].playerid]) { // player not on the list
                         self.players[players[pl].playerid] =
-                            new SqueezePlayer(players[pl].playerid, self.address, self.port);
+                            new SqueezePlayer(players[pl].playerid, players[pl].name, self.address, self.port);
                     }
                 }
-            }
-        )
-    }, this.playerUpdateInterval);
+                self.emit('register');
+            })
+        });
+    }
+
+    register();
 }
 
 util.inherits(SqueezeServer, SqueezeRequest);
+
 
 module.exports = SqueezeServer;
