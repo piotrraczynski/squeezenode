@@ -39,27 +39,27 @@ function SqueezeServer(address, port) {
 
     this.getPlayerCount = function (callback) {
         this.request(defaultPlayer, ["player", "count", "?"], callback);
-    }
+    };
 
     this.getPlayerId = function (id, callback) {
         this.request(defaultPlayer, ["player", "id", id, "?"], callback);
-    }
+    };
 
     this.getPlayerIp = function (playerId, callback) {
         this.request(defaultPlayer, ["player", "ip", playerId, "?"], callback);
-    }
+    };
 
     this.getPlayerName = function (playerId, callback) {
         this.request(defaultPlayer, ["player", "name", playerId, "?"], callback);
-    }
+    };
 
     this.getSyncGroups = function (callback) {
         this.request(defaultPlayer, ["syncgroups", "?"], callback);
-    }
+    };
 
     this.getApps = function (callback) {
         this.request(defaultPlayer, ["apps", 0, 100], callback);
-    }
+    };
 
     this.getPlayers = function (callback) {
         self.request(defaultPlayer, ["players", 0, 100], function (reply) {
@@ -67,7 +67,7 @@ function SqueezeServer(address, port) {
                 reply.result = reply.result.players_loop;
             callback(reply);
         });
-    }
+    };
 
     function register() {
 

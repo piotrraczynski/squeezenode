@@ -47,13 +47,13 @@ function SqueezeRequest(address, port) {
     }
 
     this.request = function (player, params, callback) {
-        var finalParams = new Array();
+        var finalParams = [];
         finalParams.push(player);
         finalParams.push(params);
         client.request('slim.request', finalParams, function (err, reply) {
             handle(err, reply, callback);
         });
-    }
+    };
 }
 
 util.inherits(SqueezeRequest, EventEmitter);
