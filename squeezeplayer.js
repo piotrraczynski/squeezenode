@@ -48,22 +48,6 @@ function SqueezePlayer(playerId, name, address, port) {
         this.request(playerId, ["name", "?"], callback);
     }
 
-    this.getPlaylist = function (from, to, callback) {
-        this.request(playerId, ["status", from, to], function (reply) {
-            if (reply.ok)
-                reply.result = reply.result.playlist_loop;
-            callback(reply);
-        });
-    }
-
-    this.getStatusWithPlaylist = function (from, to, callback) {
-        this.request(playerId, ["status", from, to], function (reply) {
-            if (reply.ok)
-                reply.result = reply.result;
-            callback(reply);
-        });
-    }
-
     this.getCurrentTitle = function (callback) {
         this.request(playerId, ["current_title", "?"], function (reply) {
             if (reply.ok)
@@ -84,8 +68,20 @@ function SqueezePlayer(playerId, name, address, port) {
         this.request(playerId, ["status"], callback);
     }
 
-    this.playcmd = function (callback) {
-        this.request(playerId, ["spotifyplcmd","cmd:load","uri:spotify:album:1iFHQ923uBGgyIJGzCo2U0"], callback);
+    this.getStatusWithPlaylist = function (from, to, callback) {
+        this.request(playerId, ["status", from, to], function (reply) {
+            if (reply.ok)
+                reply.result = reply.result;
+            callback(reply);
+        });
+    }
+
+    this.getPlaylist = function (from, to, callback) {
+        this.request(playerId, ["status", from, to], function (reply) {
+            if (reply.ok)
+                reply.result = reply.result.playlist_loop;
+            callback(reply);
+        });
     }
 }
 

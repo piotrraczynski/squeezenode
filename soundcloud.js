@@ -23,16 +23,12 @@
  */
 
 var util = require('util');
-var SqueezeRequest = require('./squeezerequest');
+var SqueezeApp = require('./squeezeapp');
 
-function SqueezeApp(defPlayerId, name, cmd, address, port) {
-    this.defPlayerId = defPlayerId;
-    this.name = name;
-    this.cmd = cmd;
-    SqueezeApp.super_.apply(this, [address, port]);
-
+function SoundCloud(name, cmd, address, port) {
+    SoundCloud.super_.apply(this, arguments);
 }
 
-util.inherits(SqueezeApp, SqueezeRequest);
+util.inherits(SoundCloud, SqueezeApp);
 
-module.exports = SqueezeApp;
+module.exports = SoundCloud;

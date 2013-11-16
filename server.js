@@ -41,14 +41,6 @@ function SqueezeServer(address, port) {
         this.request(defaultPlayer, ["player", "count", "?"], callback);
     }
 
-    this.getStatus = function (callback) {
-        this.request(defaultPlayer, ["version", "?"], callback);
-    }
-
-    this.getPlayers = function (callback) {
-        this.request(defaultPlayer, ["players", 0, 100], callback);
-    }
-
     this.getPlayerId = function (id, callback) {
         this.request(defaultPlayer, ["player", "id", id, "?"], callback);
     }
@@ -69,36 +61,44 @@ function SqueezeServer(address, port) {
         this.request(defaultPlayer, ["apps", 0, 100], callback);
     }
 
+    this.getPlayers = function (callback) {
+        self.request(defaultPlayer, ["players", 0, 100], function (reply) {
+            if (reply.ok)
+                reply.result = reply.result.players_loop;
+            callback(reply);
+        });
+    }
+
     function register() {
-        self.getApps(function (reply) { //TODO refactor this
-            var apps = reply.result.appss_loop;
-            var dir = __dirname + '/';
-            fs.readdir(dir, function (err, files) {
-                files.forEach(function (file) {
-                    var fil = file.substr(0, file.lastIndexOf("."));
-                    for (var pl in apps) {
-                        if (fil === apps[pl].cmd) {
-                            var app = require(dir + file);
-                            self.apps.push(new app(apps[pl].name, apps[pl].cmd, self.address, self.port));
-                        }
-                    }
-                });
-            });
+
+        self.getPlayers(function (reply) { //TODO refactor this
+            var players = reply.result;
+            for (var pl in players) {
+                if (!self.players[players[pl].playerid]) { // player not on the list
+                    self.players.push(new SqueezePlayer(players[pl].playerid, players[pl].name, self.address, self.port));
+                }
+            }
             self.emit('register1');
         });
 
         self.on('register1', function () {
-            self.getPlayers(function (reply) { //TODO refactor this
-                var players = reply.result.players_loop;
-                console.dir(players);
-                for (var pl in players) {
-                    if (!self.players[players[pl].playerid]) { // player not on the list
-                        self.players[players[pl].playerid] =
-                            new SqueezePlayer(players[pl].playerid, players[pl].name, self.address, self.port);
-                    }
-                }
-                self.emit('register');
-            })
+            self.getApps(function (reply) { //TODO refactor this
+                var apps = reply.result.appss_loop;
+                var dir = __dirname + '/';
+                fs.readdir(dir, function (err, files) {
+                    files.forEach(function (file) {
+                        var fil = file.substr(0, file.lastIndexOf("."));
+                        for (var pl in apps) {
+                            if (fil === apps[pl].cmd) {
+                                var app = require(dir + file);
+                                self.apps[apps[pl].cmd] = new app(self.players[0].playerId, apps[pl].name, apps[pl].cmd, self.address, self.port);
+                                /* workaround, app needs existing player id so first is used here */
+                            }
+                        }
+                    });
+                    self.emit('register');
+                });
+            });
         });
     }
 
