@@ -1,3 +1,5 @@
+.npmignore
+.gitignore
 npm-debug.log
 .git
 node_modules
