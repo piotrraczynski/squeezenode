@@ -33,20 +33,19 @@ function SqueezePlayer(playerId, name, address, port) {
 
     this.clearPlayList = function (callback) {
         this.request(playerId, ["playlist", "clear"], callback);
-    }
+    };
 
     this.getMode = function (callback) {
         this.request(playerId, ["mode", "?"], callback);
-    }
+    };
 
     this.setName = function (name, callback) {
         this.request(playerId, ["name", name], callback);
-    }
-
+    };
 
     this.getName = function (callback) {
         this.request(playerId, ["name", "?"], callback);
-    }
+    };
 
     this.getCurrentTitle = function (callback) {
         this.request(playerId, ["current_title", "?"], function (reply) {
@@ -54,7 +53,7 @@ function SqueezePlayer(playerId, name, address, port) {
                 reply.result = reply.result._current_title;
             callback(reply);
         });
-    }
+    };
 
     this.getCurrentRemoteMeta = function (callback) {
         this.request(playerId, ["status"], function (reply) {
@@ -62,11 +61,11 @@ function SqueezePlayer(playerId, name, address, port) {
                 reply.result = reply.result.remoteMeta;
             callback(reply);
         });
-    }
+    };
 
     this.getStatus = function (callback) {
         this.request(playerId, ["status"], callback);
-    }
+    };
 
     this.getStatusWithPlaylist = function (from, to, callback) {
         this.request(playerId, ["status", from, to], function (reply) {
@@ -74,7 +73,7 @@ function SqueezePlayer(playerId, name, address, port) {
                 reply.result = reply.result;
             callback(reply);
         });
-    }
+    };
 
     this.getPlaylist = function (from, to, callback) {
         this.request(playerId, ["status", from, to], function (reply) {
@@ -82,7 +81,27 @@ function SqueezePlayer(playerId, name, address, port) {
                 reply.result = reply.result.playlist_loop;
             callback(reply);
         });
-    }
+    };
+    
+    this.play = function (callback) {
+        his.request(playerId, ["play"], callback);
+    };
+    
+    this.pause = function (callback) {
+        this.request(playerId, ["pause"], callback);
+    };
+    
+    this.next = function (callback) {
+        this.request(playerId, ["button", "jump_rew"], callback);
+    };
+    
+    this.previous = function (callback) {
+        this.request(playerId, ["button", "jump_rew"], callback);
+    };
+    
+    this.next = function (callback) {
+        this.request(playerId, ["button", "jump_fwd"], callback);
+    };
 }
 
 util.inherits(SqueezePlayer, SqueezeRequest);
