@@ -84,7 +84,7 @@ function SqueezePlayer(playerId, name, address, port) {
     };
     
     this.play = function (callback) {
-        his.request(playerId, ["play"], callback);
+        this.request(playerId, ["play"], callback);
     };
     
     this.pause = function (callback) {
@@ -101,6 +101,18 @@ function SqueezePlayer(playerId, name, address, port) {
     
     this.next = function (callback) {
         this.request(playerId, ["button", "jump_fwd"], callback);
+    };
+    
+    this.playlistDelete = function(index, callback) {
+        this.request(playerId, ["playlist", "delete", index], callback);
+    };
+    
+    this.playlistMove = function(fromIndex, toIndex, callback) {
+        this.request(playerId, ["playlist", "move", fromIndex, toIndex], callback);
+    };
+    
+    this.playlistSave = function(playlistName, callback) {
+        this.request(playerId, ["playlist", "save", playlistName], callback);
     };
 }
 

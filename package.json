@@ -15,7 +15,7 @@
         "home automation"
     ],
     "dependencies": {
-        "jayson": ">= 1.0.11"
+        "jayson": "*"
     },
     "repository": {
         "type": "git",
