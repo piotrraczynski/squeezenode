@@ -22,7 +22,7 @@
  SOFTWARE.
  */
 
-var util = require('util');
+var inherits = require('super');
 var SqueezeApp = require('./squeezeapp');
 
 function Spotify(defPlayerId, name, cmd, address, port) {
@@ -49,6 +49,6 @@ function Spotify(defPlayerId, name, cmd, address, port) {
     }
 }
 
-util.inherits(Spotify, SqueezeApp);
+inherits(Spotify, SqueezeApp);
 
 module.exports = Spotify;

@@ -22,7 +22,7 @@
  SOFTWARE.
  */
 
-var util = require('util');
+var inherits = require('super');
 var SqueezeRequest = require('./squeezerequest');
 
 function SqueezePlayer(playerId, name, address, port) {
@@ -121,8 +121,6 @@ function SqueezePlayer(playerId, name, address, port) {
     };
 }
 
-util.inherits(SqueezePlayer, SqueezeRequest);
+inherits(SqueezePlayer, SqueezeRequest);
 
 module.exports = SqueezePlayer;
-
-

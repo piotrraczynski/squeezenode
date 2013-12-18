@@ -23,8 +23,7 @@
  */
 
 var jayson = require('jayson');
-var util = require('util');
-var EventEmitter = require('events').EventEmitter;
+var inherits = require('super');
 
 function SqueezeRequest(address, port) {
     this.address = (address !== undefined) ? address : "localhost";
@@ -55,7 +54,5 @@ function SqueezeRequest(address, port) {
         });
     };
 }
-
-util.inherits(SqueezeRequest, EventEmitter);
 
 module.exports = SqueezeRequest;

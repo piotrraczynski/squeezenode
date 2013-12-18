@@ -15,7 +15,8 @@
         "home automation"
     ],
     "dependencies": {
-        "jayson": "*"
+        "jayson": "*",
+        "super" : "*"
     },
     "repository": {
         "type": "git",

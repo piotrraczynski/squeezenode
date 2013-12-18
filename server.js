@@ -22,7 +22,7 @@
  SOFTWARE.
  */
 
-var util = require('util');
+var inherits= require('super');
 var fs = require('fs');
 var SqueezeRequest = require('./squeezerequest');
 var SqueezePlayer = require('./squeezeplayer');
@@ -34,7 +34,19 @@ function SqueezeServer(address, port) {
     var self = this;
     this.players = [];
     this.apps = [];
-
+    var subs = {};
+    this.on = function(channel, sub) {
+        subs[channel] = subs[channel] || [];
+        subs[channel].push(sub);
+    };
+    
+    this.emit = function (channel) {
+        var args = [].slice.call(arguments, 1);
+        subs[channel].forEach(function(sub) {
+            sub.apply(void 0, args);
+        });
+    };
+    
     this.playerUpdateInterval = 2000;
 
     this.getPlayerCount = function (callback) {
@@ -78,10 +90,10 @@ function SqueezeServer(address, port) {
                     self.players.push(new SqueezePlayer(players[pl].playerid, players[pl].name, self.address, self.port));
                 }
             }
-            self.emit('register1');
+            self.emit('registerPlayers');
         });
 
-        self.on('register1', function () {
+        self.on('registerPlayers', function () {
             self.getApps(function (reply) { //TODO refactor this
                 var apps = reply.result.appss_loop;
                 var dir = __dirname + '/';
@@ -105,7 +117,7 @@ function SqueezeServer(address, port) {
     register();
 }
 
-util.inherits(SqueezeServer, SqueezeRequest);
+inherits(SqueezeServer, SqueezeRequest);
 
 
 module.exports = SqueezeServer;
