@@ -119,6 +119,22 @@ function SqueezePlayer(playerId, name, address, port) {
     this.playlistSave = function(playlistName, callback) {
         this.request(playerId, ["playlist", "save", playlistName], callback);
     };
+    
+    this.sync = function(syncTo, callback) {
+        this.request(playerId, ["sync", syncTo], callback);
+    };
+    
+    this.unSync = function(callback) {
+        this.request(playerId, ["sync", "-"], callback);
+    };
+    
+    this.seek = function(seconds, callback) {
+        this.request(playerId, ["time", seconds], callback);
+    };
+    
+    this.setVolume = function(volume, callback) {
+        this.request(playerId, ["mixer", "volume", volume], callback);
+    };
 }
 
 inherits(SqueezePlayer, SqueezeRequest);
