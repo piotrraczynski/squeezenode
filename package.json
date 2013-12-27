@@ -1,7 +1,7 @@
 {
     "name": "squeezenode",
     "author": "Piotr Raczynski <pio[dot]raczynski[at]gmail[dot]com>",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "description": "Node.js wrapper library for squeezebox CLI/json interface with Spotify/SoundCloud support",
     "main": "server.js",
     "keywords": [

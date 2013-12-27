@@ -25,6 +25,6 @@ To start using te library instantiate the SqueezeServer class, eg.
     });
 
 All api requests returns reply in a callback. Each reply contains 'ok' bool variable which is true if request
-has been processed properly, false otherwise and 'result' property with the reqeust result.
+has been processed properly, false otherwise and 'result' property with the request result.
 
 
