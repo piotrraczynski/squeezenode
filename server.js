@@ -87,7 +87,7 @@ function SqueezeServer(address, port) {
             var players = reply.result;
             for (var pl in players) {
                 if (!self.players[players[pl].playerid]) { // player not on the list
-                    self.players.push(new SqueezePlayer(players[pl].playerid, players[pl].name, self.address, self.port));
+                    self.players[players[pl].playerid] = new SqueezePlayer(players[pl].playerid, players[pl].name, self.address, self.port);
                 }
             }
             self.emit('registerPlayers');
