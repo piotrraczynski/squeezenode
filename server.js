@@ -103,7 +103,7 @@ function SqueezeServer(address, port) {
                         for (var pl in apps) {
                             if (fil === apps[pl].cmd) {
                                 var app = require(dir + file);
-                                self.apps[apps[pl].cmd] = new app(self.players[0].playerId, apps[pl].name, apps[pl].cmd, self.address, self.port);
+                                self.apps[apps[pl].cmd] = new app(defaultPlayer, apps[pl].name, apps[pl].cmd, self.address, self.port);
                                 /* workaround, app needs existing player id so first is used here */
                             }
                         }
