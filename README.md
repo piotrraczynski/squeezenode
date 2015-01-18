@@ -95,3 +95,5 @@ TODO
 ----
 
 Better documentation
+Add full API description
+Add wiki
