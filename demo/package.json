@@ -1,0 +1,19 @@
+{
+    "name": "squeezenode_demo",
+    "author": "Piotr Raczynski <pio[dot]raczynski[at]gmail[dot]com>",
+    "description": "Squeezenode module demo application",
+    "keywords": [
+        "squeezebox",
+        "logitechmediaserver",
+        "spotify",
+        "soundcloud",
+        "jsonrpc",
+        "remote",
+        "smarthome",
+        "home automation"
+    ],
+    "dependencies": {
+        "celeri": "0.3.4",
+        "nomnom" : "1.8.1"
+    }
+}
