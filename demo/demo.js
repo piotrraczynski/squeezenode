@@ -22,10 +22,40 @@ function playerIdByName(name, callback) {
 
 squeeze.on('register', function(){
         celeri.option({
-            command: 'spotifySearch :query',
-            description: 'Performs spotify search'
+            command: 'spotifySearchTracks :query',
+            description: 'Performs spotify tracks search'
         }, function (data) {
-            squeeze.apps.spotify.searchTracks(data.query, 0, 10, function (reply) {
+            squeeze.apps.spotify.searchTracks(data.query, 0, 20, function (reply) {
+                if (reply.ok)
+                    console.dir(reply.result);
+            });
+        });
+
+        celeri.option({
+            command: 'spotifySearchAlbums :query',
+            description: 'Performs spotify albums search'
+        }, function (data) {
+            squeeze.apps.spotify.searchAlbums(data.query, 0, 20, function (reply) {
+                if (reply.ok)
+                    console.dir(reply.result);
+            });
+        });
+
+        celeri.option({
+            command: 'spotifySearchArtists :query',
+            description: 'Performs spotify artists search'
+        }, function (data) {
+            squeeze.apps.spotify.searchArtists(data.query, 0, 20, function (reply) {
+                if (reply.ok)
+                    console.dir(reply.result);
+            });
+        });
+
+        celeri.option({
+            command: 'spotifySearch :query',
+            description: 'Performs spotify general search'
+        }, function (data) {
+            squeeze.apps.spotify.searchAll(data.query, 0, 20, function (reply) {
                 if (reply.ok)
                     console.dir(reply.result);
             });
