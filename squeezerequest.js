@@ -1,7 +1,7 @@
 /*
  The MIT License (MIT)
 
- Copyright (c) 2013 Piotr Raczynski, pio[dot]raczynski[at]gmail[dot]com
+ Copyright (c) 2013-2015 Piotr Raczynski, pio[dot]raczynski[at]gmail[dot]com
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -30,6 +30,7 @@ function SqueezeRequest(address, port) {
     this.port = (port !== undefined) ? port : 9000;
     var jsonrpc = this.address + ':' + this.port + '/jsonrpc.js';
     var client = jayson.client.http(jsonrpc);
+    client.options.version = 1;
 
     function handle(err, reply, callback) {
         var result = {};
@@ -49,7 +50,7 @@ function SqueezeRequest(address, port) {
         var finalParams = [];
         finalParams.push(player);
         finalParams.push(params);
-        client.request('slim.request', finalParams, function (err, reply) {
+        client.request('slim.request', finalParams, null, function (err, reply) {
             handle(err, reply, callback);
         });
     };

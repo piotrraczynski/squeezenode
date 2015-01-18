@@ -27,7 +27,6 @@ var fs = require('fs');
 var SqueezeRequest = require('./squeezerequest');
 var SqueezePlayer = require('./squeezeplayer');
 
-
 function SqueezeServer(address, port) {
     SqueezeServer.super_.apply(this, arguments);
     var defaultPlayer = "00:00:00:00:00:00";
@@ -39,14 +38,14 @@ function SqueezeServer(address, port) {
         subs[channel] = subs[channel] || [];
         subs[channel].push(sub);
     };
-    
+
     this.emit = function (channel) {
         var args = [].slice.call(arguments, 1);
-        subs[channel].forEach(function(sub) {
-            sub.apply(void 0, args);
-        });
+        for (var sub in subs[channel]) {
+            subs[channel][sub].apply(void 0, args);
+        }
     };
-    
+
     this.playerUpdateInterval = 2000;
 
     this.getPlayerCount = function (callback) {
@@ -95,21 +94,24 @@ function SqueezeServer(address, port) {
 
         self.on('registerPlayers', function () {
             self.getApps(function (reply) { //TODO refactor this
-                var apps = reply.result.appss_loop;
-                var dir = __dirname + '/';
-                fs.readdir(dir, function (err, files) {
-                    files.forEach(function (file) {
-                        var fil = file.substr(0, file.lastIndexOf("."));
-                        for (var pl in apps) {
-                            if (fil === apps[pl].cmd) {
-                                var app = require(dir + file);
-                                self.apps[apps[pl].cmd] = new app(defaultPlayer, apps[pl].name, apps[pl].cmd, self.address, self.port);
-                                /* workaround, app needs existing player id so first is used here */
+                if (reply.ok) {
+                    var apps = reply.result.appss_loop;
+                    var dir = __dirname + '/';
+                    fs.readdir(dir, function (err, files) {
+                        files.forEach(function (file) {
+                            var fil = file.substr(0, file.lastIndexOf("."));
+                            for (var pl in apps) {
+                                if (fil === apps[pl].cmd) {
+                                    var app = require(dir + file);
+                                    self.apps[apps[pl].cmd] = new app(defaultPlayer, apps[pl].name, apps[pl].cmd, self.address, self.port);
+                                    /* workaround, app needs existing player id so first is used here */
+                                }
                             }
-                        }
+                        });
+                        self.emit('register');
                     });
+                } else
                     self.emit('register');
-                });
             });
         });
     }
@@ -118,6 +120,5 @@ function SqueezeServer(address, port) {
 }
 
 inherits(SqueezeServer, SqueezeRequest);
-
 
 module.exports = SqueezeServer;

@@ -1,7 +1,7 @@
 /*
  The MIT License (MIT)
 
- Copyright (c) 2013 Piotr Raczynski, pio[dot]raczynski[at]gmail[dot]com
+ Copyright (c) 2013-2015 Piotr Raczynski, pio[dot]raczynski[at]gmail[dot]com
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -82,56 +82,56 @@ function SqueezePlayer(playerId, name, address, port) {
             callback(reply);
         });
     };
-    
+
     this.play = function (callback) {
         this.request(playerId, ["play"], callback);
     };
-    
+
     this.playIndex = function (index, callback) {
         console.log("index: " + index);
         this.request(playerId, ["playlist", "index", index], callback);
     };
-    
+
     this.pause = function (callback) {
         this.request(playerId, ["pause"], callback);
     };
-    
+
     this.next = function (callback) {
         this.request(playerId, ["button", "jump_rew"], callback);
     };
-    
+
     this.previous = function (callback) {
         this.request(playerId, ["button", "jump_rew"], callback);
     };
-    
+
     this.next = function (callback) {
         this.request(playerId, ["button", "jump_fwd"], callback);
     };
-    
+
     this.playlistDelete = function(index, callback) {
         this.request(playerId, ["playlist", "delete", index], callback);
     };
-    
+
     this.playlistMove = function(fromIndex, toIndex, callback) {
         this.request(playerId, ["playlist", "move", fromIndex, toIndex], callback);
     };
-    
+
     this.playlistSave = function(playlistName, callback) {
         this.request(playerId, ["playlist", "save", playlistName], callback);
     };
-    
+
     this.sync = function(syncTo, callback) {
         this.request(playerId, ["sync", syncTo], callback);
     };
-    
+
     this.unSync = function(callback) {
         this.request(playerId, ["sync", "-"], callback);
     };
-    
+
     this.seek = function(seconds, callback) {
         this.request(playerId, ["time", seconds], callback);
     };
-    
+
     this.setVolume = function(volume, callback) {
         this.request(playerId, ["mixer", "volume", volume], callback);
     };

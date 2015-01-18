@@ -1,7 +1,7 @@
 /*
  The MIT License (MIT)
 
- Copyright (c) 2013 Piotr Raczynski, pio[dot]raczynski[at]gmail[dot]com
+ Copyright (c) 2013-2015 Piotr Raczynski, pio[dot]raczynski[at]gmail[dot]com
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -24,29 +24,62 @@
 
 var inherits = require('super');
 var SqueezeApp = require('./squeezeapp');
+var request = require('request');
+var util = require('util');
 
 function Spotify(defPlayerId, name, cmd, address, port) {
     Spotify.super_.apply(this, arguments);
+    this.helperPort = 9005;
+    var helperAddress = this.address + ':' + this.helperPort + '/';
 
-    this.search = function (search, callback) {
-        this.request(this.defPlayerId, ["spotify", "items", 0, 100, "item_id:8", "search:" + search], callback);
-    }
+
+    function helperRequest(path, params, callback) {
+        var res = {ok:false};
+        console.log(params);
+        request({url: helperAddress + path + '?' + params }, function (error, response, body) {
+            if (!error && response.statusCode == 200) {
+                res.ok = true;
+                res.result = JSON.parse(body);
+            }
+            callback(res);
+        });
+    };
+
+    function searchGeneric (searchParams, callback) {
+        helperRequest('search.json', searchParams, callback);
+    };
+
+    this.searchTracks =  function (query, offset, len, callback) {
+        searchGeneric(util.format("o=%d&trq=%d&q=%s", offset, len, query), callback);
+    };
+
+    this.searchAlbums =  function (query, offset, len, callback) {
+        searchGeneric(util.format("o=%d&alq=%d&q=%s", offset, len, query), callback);
+    };
+
+    this.searchArtists =  function (query, offset, len, callback) {
+        searchGeneric(util.format("o=%d&arq=%d&q=%s", offset, len, query), callback);
+    };
+
+    this.searchAll =  function (query, offset, len, callback) {
+        searchGeneric(util.format("o=%d&trq=%d&alq=%d&arq=%d&q=%s", offset, len, len, len, query), callback);
+    };
 
     this.getItemId = function (itemId, callback) {
         this.request(this.defPlayerId, ["spotify", "items", 0, 100, "item_id:" + itemId], callback);
-    }
+    };
 
     this.getItemIdDetails = function (itemId, callback) {
         this.request(this.defPlayerId, ["spotify", "items", 0, 100, "menu:1", "item_id:" + itemId], callback);
-    }
+    };
 
     this.addToPlaylist = function (itemURI, playerId, callback) {
         this.request(playerId, ["spotifyplcmd", "cmd:add", "uri:" + itemURI], callback);
-    }
+    };
 
-    this.play = function (item, playerId, callback) {
+    this.loadToPlaylist = function (itemURI, playerId, callback) {
         this.request(playerId, ["spotifyplcmd", "cmd:load", "uri:" + itemURI], callback);
-    }
+    };
 }
 
 inherits(Spotify, SqueezeApp);
