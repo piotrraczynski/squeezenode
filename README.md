@@ -94,6 +94,6 @@ Let's assume you'd like to play 'The Fixer' performed by Pearl Jam with player '
 TODO
 ----
 
-Better documentation
-Add full API description
-Add wiki
+* Better documentation
+* Add full API description
+* Add wiki
