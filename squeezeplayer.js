@@ -1,18 +1,14 @@
 /*
  The MIT License (MIT)
-
  Copyright (c) 2013-2015 Piotr Raczynski, pio[dot]raczynski[at]gmail[dot]com
-
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
-
  The above copyright notice and this permission notice shall be included in all
  copies or substantial portions of the Software.
-
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -51,6 +47,22 @@ function SqueezePlayer(playerId, name, address, port) {
         this.request(playerId, ["current_title", "?"], function (reply) {
             if (reply.ok)
                 reply.result = reply.result._current_title;
+            callback(reply);
+        });
+    };
+
+    this.getArtist = function (callback) {
+        this.request(playerId, ["artist", "?"], function (reply) {
+            if (reply.ok)
+                reply.result = reply.result._artist;
+            callback(reply);
+        });
+    };
+
+    this.getAlbum = function (callback) {
+        this.request(playerId, ["album", "?"], function (reply) {
+            if (reply.ok)
+                reply.result = reply.result._album;
             callback(reply);
         });
     };
@@ -134,6 +146,25 @@ function SqueezePlayer(playerId, name, address, port) {
 
     this.setVolume = function(volume, callback) {
         this.request(playerId, ["mixer", "volume", volume], callback);
+    };
+
+    this.getVolume = function(callback) {
+        this.request(playerId, ["mixer", "volume", "?"], function(reply) {
+          if (reply.ok)
+              reply.result = reply.result._volume;
+          callback(reply);
+        });
+    };
+
+    this.playFavorite = function (favorite, callback) {
+        this.request(playerId, ["favorites", "playlist", "play", "item_id:" + favorite], callback);
+    };
+
+    this.playRandom = function(target, callback) {
+        this.request(playerId, ["randomplay", target], callback);
+    };
+    this.power = function(state, callback) {
+        this.request(playerId, ["power", state], callback);
     };
 }
 
