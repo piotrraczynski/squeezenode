@@ -72,6 +72,11 @@ function SqueezeServer(address, port) {
         this.request(defaultPlayer, ["apps", 0, 100], callback);
     };
 
+    //pass 0 or empty string "" to display root of music folder
+    this.musicfolder = function (folderId, callback) {
+        this.request(defaultPlayer, ["musicfolder", 0, 100, "folder_id:" + folderId], callback);
+    };
+
     this.getPlayers = function (callback) {
         self.request(defaultPlayer, ["players", 0, 100], function (reply) {
             if (reply.ok)

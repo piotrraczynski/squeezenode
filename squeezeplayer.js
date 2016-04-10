@@ -135,6 +135,16 @@ function SqueezePlayer(playerId, name, address, port) {
     this.setVolume = function(volume, callback) {
         this.request(playerId, ["mixer", "volume", volume], callback);
     };
+
+    //to append song url (path)/playlist or directory content to end of the playlist
+    this.addToPlaylist = function (item, callback) {
+        this.request(playerId, ["playlist", "add", item], callback);
+    };
+
+    //to insert song url (path)/playlist or directory content after currently playing track
+    this.insertToPlaylist = function (item, callback) {
+        this.request(playerId, ["playlist", "insert", item], callback);
+    };
 }
 
 inherits(SqueezePlayer, SqueezeRequest);
